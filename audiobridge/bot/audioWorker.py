@@ -274,6 +274,7 @@ class AudioWorker(threading.Thread):
 
             download_string = " ".join([
                 'yt-dlp',
+                '--proxy "{proxy_url}"',
                 '--no-playlist',
                 '--no-warnings',
                 '--retries {attempts}',
@@ -349,7 +350,8 @@ class AudioWorker(threading.Thread):
                 url=self.url,
                 interval=audioSection,
                 attempts=bot_cfg.settings.max_attempts,
-                sleep=bot_cfg.settings.time_attempt
+                sleep=bot_cfg.settings.time_attempt,
+                proxy_url=bot_cfg.settings.proxy_url,
             )
 
             # Скачивание аудио
