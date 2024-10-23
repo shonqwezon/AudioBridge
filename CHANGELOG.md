@@ -5,6 +5,17 @@
 и этот проект придерживается [Semantic Versioning].
 
 ## [Unreleased]
+## [1.3.7] - 24-10-2024
+
+### Added
+* <config/bot> Добавлено поле `proxy_url` у `Settings`
+
+### Changed
+* <bot/audioWorker> Получение битрейта песни теперь производится с помощью `yt-dlp`, а не `ffmpeg`
+
+### Fixed
+* <bot/audioWorker> Обойдена блокировка youtube и других сервисов с помощью `proxy`
+
 ## [1.3.6] - 22-04-2023
 
 ### Added
