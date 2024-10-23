@@ -33,7 +33,8 @@ ydl_opts = {
     'nocheckcertificate': True,
     'retries': bot_cfg.settings.max_attempts,
     'format': 'bestaudio/best',
-    'noplaylist': True
+    'noplaylist': True,
+    'proxy': bot_cfg.settings.proxy_url,
 }
 
 class AudioWorker(threading.Thread):
