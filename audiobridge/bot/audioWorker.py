@@ -308,7 +308,7 @@ class AudioWorker(threading.Thread):
             logger.debug(f"Актуальная длительность видео: {audio_duration}")
 
             # Приблизительный вес файла
-            self.file_size = audio_duration * self._getAudioBitrate() * 128 #  F (bytes) = t (s) * bitrate (kb / s) * 1024 // 8
+            self.file_size = audio_duration * bitrate * 128 #  F (bytes) = t (s) * bitrate (kb / s) * 1024 // 8
 
             # Проверка размера файла (необходимо из-за внутренних ограничений VK)
             logger.debug(f"Предварительный размер файла: {round(self.file_size / 1024**2, 2)} Mb")
