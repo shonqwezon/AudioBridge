@@ -19,6 +19,7 @@ class Settings:
     max_video_duration: int  # Максимальная длительность видео (в сек.)
     max_attempts      : int  # Количество попыток при ошибке скачивания
     time_attempt      : int  # Интервал между попытками скачивания (в сек.)
+    proxy_url         : str  # Прокси url
 
 @dataclass
 class Authentication:
@@ -82,7 +83,8 @@ cfg = Bot(
         msg_period         = settings_json.get("msg_period", 60),
         max_video_duration = settings_json.get("max_video_duration", 3 * 60 * 60),
         max_attempts       = settings_json.get("max_attempts", 3),
-        time_attempt       = settings_json.get("time_attempt", 1)
+        time_attempt       = settings_json.get("time_attempt", 1),
+        proxy_url          = env.str('PROXY', ""),
     ),
     auth           = Authentication(
         version     = settings_json.get("bot_version", "v1.0.0"),

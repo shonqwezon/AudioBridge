@@ -33,7 +33,8 @@ ydl_opts = {
     'nocheckcertificate': True,
     'retries': bot_cfg.settings.max_attempts,
     'format': 'bestaudio/best',
-    'noplaylist': True
+    'noplaylist': True,
+    'proxy': bot_cfg.settings.proxy_url,
 }
 
 class AudioWorker(threading.Thread):
@@ -78,48 +79,6 @@ class AudioWorker(threading.Thread):
         self.path    = str(self.task_id)      # Путь сохранения файла
 
         logger.debug(f'Получена задача ({self.task_id}): {task}')
-
-    def _getAudioBitrate(self, attempts = 0) -> int:
-        """Извлечение битрейта аудио.
-
-        Args:
-            cmd (str): Команда для извлечения информации об аудио.
-            attempts (int, optional): Количество попыток неуспешного выполнения команды. Defaults to 0.
-
-        Raises:
-            CustomError: Вызов ошибки с настраиваемым содержанием.
-
-        Returns:
-            tuple: (продолжительность аудио в сек., битрейт аудио в кб/c)
-        """
-        # Выход из рекурсии, если пользователь отменил выполнение запроса
-        if self._stop:
-            raise CustomError(ErrorType.audioProc.STOP_THREAD)
-        # Выход из рекурсии, если превышено число попыток выполнения команды
-        if attempts == bot_cfg.settings.max_attempts:
-            logger.warning("Can't get real audio bitrate, return default volume.")
-            return 128
-        # Проверка на существование прямой ссылки
-        proc = subprocess.Popen(cmdAudioBitrate(self.url), stderr = subprocess.PIPE, text = True, shell = True)
-        audioInfo = proc.communicate()[1].strip()
-        # Данная ошибка может произойти неожиданно, поэтому приходится повторять попытку выполнения команды через определённое время
-        pos_bitrate = audioInfo.find("bitrate:")
-        if audioInfo.find("bitrate:") == -1:
-            attempts += 1
-            logger.error(f"Ошибка получения информации об аудио ({attempts}):\n{audioInfo}")
-            time.sleep(bot_cfg.settings.time_attempt)
-            return self._getAudioBitrate(attempts)
-
-        bitrate = audioInfo[pos_bitrate:].split(' ')[1].strip()
-        # Проверка наличия результатов работы команды
-        if not bitrate:
-            attempts += 1
-            logger.error(f"Отсутствует битрейт ({attempts})")
-            time.sleep(bot_cfg.settings.time_attempt)
-            return self._getAudioBitrate(attempts)
-        logger.debug(f"Битрейт получен ({attempts}): {bitrate}")
-        # Выход из рекурсии, если информация была успешно получена
-        return int(bitrate)
 
     def _downloadAudio(self, cmd: str):
         """Загрузка видео и его конвертация в mp3 файл.
@@ -274,6 +233,7 @@ class AudioWorker(threading.Thread):
 
             download_string = " ".join([
                 'yt-dlp',
+                '--proxy "{proxy_url}"',
                 '--no-playlist',
                 '--no-warnings',
                 '--retries {attempts}',
@@ -301,8 +261,20 @@ class AudioWorker(threading.Thread):
             audio_duration = int(audioInfo.get("duration", 0))
             if not (audio_duration and audioInfo.get("id")):
                 raise CustomError(ErrorType.audioProc.NO_INFO)
+
+            bitrate = 0
+            for f in audioInfo.get('formats', []):
+                abr = f.get('abr')
+                if abr and f.get('acodec') != 'none':
+                    if abr > bitrate:
+                        bitrate = abr
+
+            if not bitrate:
+                logger.warning("Can't get real audio bitrate, set default volume.")
+                bitrate = 128
             title, author = self._analyzeTitle(audioInfo.get("title"), audioInfo.get("channel"))
-            logger.debug(f"Информация об аудио успешно получена: {audio_duration}, {title}, {author}")
+
+            logger.debug(f"Информация об аудио успешно получена: {audio_duration} (sec), {bitrate} (kbps), {title}, {author}")
 
             # Обработка времени среза в случае, если оно указано
             audioSection = ""
@@ -336,7 +308,7 @@ class AudioWorker(threading.Thread):
             logger.debug(f"Актуальная длительность видео: {audio_duration}")
 
             # Приблизительный вес файла
-            self.file_size = audio_duration * self._getAudioBitrate() * 128 #  F (bytes) = t (s) * bitrate (kb / s) * 1024 // 8
+            self.file_size = audio_duration * bitrate * 128 #  F (bytes) = t (s) * bitrate (kb / s) * 1024 // 8
 
             # Проверка размера файла (необходимо из-за внутренних ограничений VK)
             logger.debug(f"Предварительный размер файла: {round(self.file_size / 1024**2, 2)} Mb")
@@ -349,7 +321,8 @@ class AudioWorker(threading.Thread):
                 url=self.url,
                 interval=audioSection,
                 attempts=bot_cfg.settings.max_attempts,
-                sleep=bot_cfg.settings.time_attempt
+                sleep=bot_cfg.settings.time_attempt,
+                proxy_url=bot_cfg.settings.proxy_url,
             )
 
             # Скачивание аудио
