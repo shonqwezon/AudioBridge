@@ -285,6 +285,7 @@
 
 <!-- Versions -->
 [unreleased]: https://github.com/AudioBridge-team/AudioBridge/compare/prod...dev
+[1.3.7]: https://github.com/AudioBridge-team/AudioBridge/compare/v1.3.6...v1.3.7
 [1.3.6]: https://github.com/AudioBridge-team/AudioBridge/compare/v1.3.5...v1.3.6
 [1.3.5]: https://github.com/AudioBridge-team/AudioBridge/compare/v1.3.4...v1.3.5
 [1.3.4]: https://github.com/AudioBridge-team/AudioBridge/compare/v1.3.3...v1.3.4
