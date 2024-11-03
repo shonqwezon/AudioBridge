@@ -3,7 +3,7 @@ version: "3.8"
 services:
   db:
     container_name: db_container_${MODE}
-    image: postgres
+    image: postgres:14.0
     restart: always
     volumes:
       - ../data/db/${DB_NAME}:/var/lib/postgresql/data
