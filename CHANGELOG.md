@@ -5,6 +5,12 @@
 и этот проект придерживается [Semantic Versioning].
 
 ## [Unreleased]
+
+## [1.3.8] - 29-12-2024
+
+### Changed
+* <Dockerfile> Переконфигурирован ffmpeg для поддержки `libmp3lame` для решения проблемы с `soundcloud`
+
 ## [1.3.7] - 24-10-2024
 
 ### Added
@@ -285,6 +291,7 @@
 
 <!-- Versions -->
 [unreleased]: https://github.com/AudioBridge-team/AudioBridge/compare/prod...dev
+[1.3.8]: https://github.com/AudioBridge-team/AudioBridge/compare/v1.3.7...v1.3.8
 [1.3.7]: https://github.com/AudioBridge-team/AudioBridge/compare/v1.3.6...v1.3.7
 [1.3.6]: https://github.com/AudioBridge-team/AudioBridge/compare/v1.3.5...v1.3.6
 [1.3.5]: https://github.com/AudioBridge-team/AudioBridge/compare/v1.3.4...v1.3.5
