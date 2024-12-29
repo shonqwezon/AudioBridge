@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 RUN wget https://github.com/yt-dlp/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-linux64-gpl.tar.xz -O /tmp/ffmpeg.tar.xz \
-    && tar -xfv /tmp/ffmpeg.tar.xz -C /tmp
+    && tar -xf /tmp/ffmpeg.tar.xz -C /tmp
 
 RUN mv /tmp/ffmpeg-master-latest-linux64-gpl/bin/* /usr/local/bin/
 RUN rm -f /tmp/ffmpeg.tar.xz
