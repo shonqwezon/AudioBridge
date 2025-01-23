@@ -104,8 +104,13 @@ class AudioWorker(threading.Thread):
             if "size=" in line.lower():
                 # Обновление сообщения с процессом загрузки по интервалы (необходимо для предотвращения непреднамеренного спама)
                 if round(time.time() - last_msg_time) >= bot_cfg.settings.msg_period:
+                    logger.info(line)
                     size = line[6:].strip()
-                    size = int(size[:size.find(' ')-2])
+                    size = size[:size.find(' ')]
+                    if "kib" in size.lower():
+                        size = int(size[:-3])
+                    else:
+                        size = int(size[:-2])
                     if size:
                         vars.api.bot.messages.edit(peer_id = self.user_id, message = f"Загружено {int(round(size * 1024 / self.file_size, 2) * 100)}% ({round(size / 1024, 2)} / {round(self.file_size / 1024**2, 2)} Мб)" + pl_suffix, message_id = self.progress_msg_id)
                     last_msg_time = time.time()
