@@ -104,6 +104,7 @@ class AudioWorker(threading.Thread):
             if "size=" in line.lower():
                 # Обновление сообщения с процессом загрузки по интервалы (необходимо для предотвращения непреднамеренного спама)
                 if round(time.time() - last_msg_time) >= bot_cfg.settings.msg_period:
+                    logger.info(line)
                     size = line[6:].strip()
                     size = int(size[:size.find(' ')-2])
                     if size:
