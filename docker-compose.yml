@@ -11,7 +11,7 @@ services:
       - POSTGRES_PASSWORD=${PG_PASSWORD}
     labels:
       - dev.dozzle.name=db
-      - dev.dozzle.group=audiobridge_${MODE}
+      - dozzle.group=audiobridge_${MODE}
 
   vkbot:
     container_name: vkbot_container_${MODE}
@@ -28,4 +28,4 @@ services:
       - db
     labels:
       - dev.dozzle.name=bot
-      - dev.dozzle.group=audiobridge_${MODE}
+      - dozzle.group=audiobridge_${MODE}
