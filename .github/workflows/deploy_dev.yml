@@ -18,6 +18,6 @@ jobs:
               with:
                 path: dev
             - name: Build and run docker compose
-              run: MODE=dev docker compose --env-file ~/data/.env.dev up --build -d
+              run: pwd && MODE=dev docker compose --env-file ~/data/.env.dev up --build -d
             - name: Clear unused images
               run: docker image prune -f
