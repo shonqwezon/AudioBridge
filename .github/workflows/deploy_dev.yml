@@ -15,7 +15,8 @@ jobs:
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
-              path: dev
+              with:
+                path: dev
             - name: Build and run docker compose
               run: MODE=dev docker compose --env-file ~/data/.env.dev up --build -d
             - name: Clear unused images
