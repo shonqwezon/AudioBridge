@@ -16,7 +16,7 @@ services:
       context: .
     restart: always
     ports:
-      - 127.0.0.1:${SERVER_PORT}:${SERVER_PORT}
+      - ${SERVER_HOST}:${SERVER_PORT}:${SERVER_PORT}
     volumes:
       - ~/data/logs:/AudioBridge/data/logs
     env_file:
