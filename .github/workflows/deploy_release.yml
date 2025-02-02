@@ -17,6 +17,6 @@ jobs:
               with:
                 path: prod
             - name: Build and run docker compose
-              run: MODE=prod docker compose --env-file ~/data/.env.prod up --build -d
+              run: cd prod && MODE=prod docker compose --env-file ~/data/.env.prod up --build -d
             - name: Clear unused images
               run: docker image prune -f
