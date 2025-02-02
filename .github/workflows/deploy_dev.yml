@@ -9,23 +9,15 @@ on:
       - dev
       - 'release/*'
 
-# A workflow
 jobs:
-  DevDeploy:
-    runs-on: ubuntu-latest
-    steps:
-      #Connecting to server
-      - name: Connecting to server
-        uses: appleboy/ssh-action@master
-        with:
-          host    : ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key     : ${{ secrets.SSH_KEY }}
-          port    : ${{ secrets.SSH_PORT }}
-          script: |
-            cd /root/AudioBridge
-            rm -rf dev
-            git clone -b ${{ github.ref_name }} --single-branch git@github.com:AudioBridge-team/AudioBridge.git dev
-            cd dev
-            chmod u+x install.zsh
-            ./install.zsh -d
+    deploy:
+        runs-on: self-hosted
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                path: dev
+            - name: Build and run docker compose
+              run: cd dev && MODE=dev docker compose --env-file ~/data/.env.dev up --build -d
+            - name: Clear unused images
+              run: docker image prune -f

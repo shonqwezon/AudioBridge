@@ -34,7 +34,7 @@ ydl_opts = {
     'retries': bot_cfg.settings.max_attempts,
     'format': 'bestaudio/best',
     'noplaylist': True,
-    'proxy': bot_cfg.settings.proxy_url,
+    # 'proxy': bot_cfg.settings.proxy_url,
 }
 
 class AudioWorker(threading.Thread):
@@ -238,7 +238,7 @@ class AudioWorker(threading.Thread):
 
             download_string = " ".join([
                 'yt-dlp',
-                '--proxy "{proxy_url}"',
+                # '--proxy "{proxy_url}"',
                 '--no-playlist',
                 '--no-warnings',
                 '--retries {attempts}',
@@ -327,7 +327,7 @@ class AudioWorker(threading.Thread):
                 interval=audioSection,
                 attempts=bot_cfg.settings.max_attempts,
                 sleep=bot_cfg.settings.time_attempt,
-                proxy_url=bot_cfg.settings.proxy_url,
+                # proxy_url=bot_cfg.settings.proxy_url,
             )
 
             # Скачивание аудио
