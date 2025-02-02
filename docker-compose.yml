@@ -9,6 +9,8 @@ services:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${PG_USER}
       - POSTGRES_PASSWORD=${PG_PASSWORD}
+    labels:
+      - dev.dozzle.name=ab_db_${MODE}
 
   vkbot:
     container_name: vkbot_container_${MODE}
@@ -23,3 +25,5 @@ services:
       - ~/data/.env.${MODE}
     depends_on:
       - db
+    labels:
+      - dev.dozzle.name=ab_bot_${MODE}
