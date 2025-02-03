@@ -1,7 +1,7 @@
 services:
   db:
     container_name: db_container_${MODE}
-    image: postgres:14.0
+    image: postgres:17
     restart: always
     volumes:
       - ~/data/db/${DB_NAME}:/var/lib/postgresql/data

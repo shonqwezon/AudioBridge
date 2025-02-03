@@ -2,4 +2,4 @@ vk_api
 pydub
 psycopg2-binary
 environs
-yt_dlp==2025.01.15
+yt_dlp==2025.01.26
