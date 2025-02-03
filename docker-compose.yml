@@ -4,7 +4,7 @@ services:
     image: postgres:17
     restart: always
     volumes:
-      - ${DB_NAME}_volume:/var/lib/postgresql/data
+      - ~/data/db/${DB_NAME}:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${PG_USER}
@@ -29,5 +29,3 @@ services:
     labels:
       - dev.dozzle.name=bot
       - dev.dozzle.group=audiobridge_${MODE}
-volumes:
-  ${DB_NAME}_volume:
